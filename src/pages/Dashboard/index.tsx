@@ -1,11 +1,10 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
-import DashboardScreen from '../../components/DashboardScreen'
+import { Outlet } from 'react-router-dom' 
 import Navbar from './components/Navbar'
 import SideBar from './components/SideBar'
 import TransactionDetail from './components/TransactionDetail'
 
-export default function Index() {
+export default function Index() { 
     return (
         <div className=' w-full flex ' >
             <div className=' w-fit ' >

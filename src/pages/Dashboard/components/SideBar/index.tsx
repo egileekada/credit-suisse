@@ -1,9 +1,12 @@
 import React from 'react' 
 import { useNavigate, useLocation } from 'react-router-dom'
 import Logo from "../../../../assets/logo.svg"
+import { IUser, UserContext } from '../../../../context';
 import SideBarIcons from '../SideBarIcons'
 
 export default function Index() {
+    
+    const userContext: IUser = React.useContext(UserContext); 
 
     const TabArray = [
         {
@@ -43,6 +46,7 @@ export default function Index() {
     const [tab, setTab] = React.useState(location.pathname)
 
     const ClickHandler =(link: any) => {
+        userContext.setSearch("")
         setTab(link)
         navigate(link)
     }
