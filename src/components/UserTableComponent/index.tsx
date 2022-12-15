@@ -290,7 +290,7 @@ export default function Index(props: any) {
             
             <Modal closeOnOverlayClick={false} isOpen={isOpen} isCentered onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent> 
+                <ModalContent>  
                 <ModalCloseButton />
                 <ModalBody pb={6}> 
                 </ModalBody>
@@ -302,6 +302,7 @@ export default function Index(props: any) {
                     )}
                     {modalType === "balance" && ( 
                         <div className=' w-full flex flex-col px-8 py-6 items-center justify-center ' > 
+                            <p className=' font-bold text-xl mb-8 ' >Update User's Balance</p>
                             <Input onChange={(e)=> setNewAmount(e.target.value)} height="45px" placeholder={"$"+currentData?.balance} /> 
                         </div>
                     )}
