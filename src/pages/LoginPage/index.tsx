@@ -54,7 +54,7 @@ export default function Index() {
             if (request.status === 200 || request.status === 201) { 
                 localStorage.setItem("token", request?.data?.data?.token)   
                 toast({
-                    title: "Login Successfully",
+                    title: request?.data?.message,
                     position: "bottom",
                     status: "success",
                     isClosable: true,
@@ -63,7 +63,7 @@ export default function Index() {
                     setLoading(false); 
                     navigate("/dashboard")
                     clearTimeout(t1);
-                }, 3000);  
+                }, 1000);  
             }else { 
 
                 toast({
