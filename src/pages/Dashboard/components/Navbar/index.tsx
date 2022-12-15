@@ -12,7 +12,7 @@ export default function Index() {
                 <div className=' absolute z-10 pl-3 h-full w-fit flex justify-center items-center  ' >
                     <img src={Search} className=" w-[25px] "  alt="logo" />
                 </div>
-                <Input onChange={(e)=> userContext.setSearch(e.target.value)} paddingLeft="50px" height="45px" backgroundColor="#fff" placeholder="Search for your keywords" width="320px" fontSize="14px" />
+                <Input onChange={(e)=> userContext.setSearch(e.target.value)} value={userContext.search} paddingLeft="50px" height="45px" backgroundColor="#fff" placeholder="Search for your keywords" width="320px" fontSize="14px" />
             </div>
             <div className=' flex items-center ' >
                 <p className=' text-[#141926] text-sm font-bold ' >Admin</p>
