@@ -17,21 +17,21 @@ export default function Index() {
             name: "Users",
             link: "/dashboard/users"
         },
-        {
-            name: "Profile",
-            link: "/dashboard/profile"
-        },
+        // {
+        //     name: "Profile",
+        //     link: "/dashboard/profile"
+        // },
     ]
 
     const BottomTab = [ 
-        {
-            name: "Help & Support",
-            link: "/dashboard/help&support"
-        },
-        {
-            name: "Settings",
-            link: "/dashboard/settings"
-        },
+        // {
+        //     name: "Help & Support",
+        //     link: "/dashboard/help&support"
+        // },
+        // {
+        //     name: "Settings",
+        //     link: "/dashboard/settings"
+        // },
         {
             name: "Log Out",
             link: "/"
