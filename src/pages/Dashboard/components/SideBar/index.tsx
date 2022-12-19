@@ -39,9 +39,7 @@ export default function Index() {
     ]
 
     const location = useLocation();
-    const navigate = useNavigate()
-
-    console.log(location.pathname)
+    const navigate = useNavigate() 
 
     const [tab, setTab] = React.useState(location.pathname)
 

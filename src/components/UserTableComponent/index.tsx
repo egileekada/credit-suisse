@@ -28,8 +28,7 @@ export default function Index(props: any) {
         const request = await handleGetData("/admin/users")  
         if(request?.data?.message === "Unauthenticated."){
             navigate("/")
-        }
-        console.log(request)
+        } 
         setDataInfo(request.data.data)
     } 
 

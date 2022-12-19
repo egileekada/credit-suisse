@@ -5,15 +5,13 @@ import { IUser, UserContext } from '../../../../context';
 import { cashFormat } from '../../../../utils/cashFormat';
 
 export default function Index() {
-
-
+ 
     const { handleGetData } = useGetDataCallback(); 
     const [ dataInfo, setDataInfo ] = React.useState([] as any)
     const userContext: IUser = React.useContext(UserContext);
 
     const GetInformation =async()=>{
-        const request = await handleGetData("/admin/dashboard")   
-        console.log(request.data.data)
+        const request = await handleGetData("/admin/dashboard")  
         setDataInfo(request.data.data)
     } 
 

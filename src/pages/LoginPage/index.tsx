@@ -144,7 +144,7 @@ export default function Index() {
                     <button onClick={()=> submit()} className=' bg-[#183964] w-full h-[45px] rounded-lg mt-8 poppins-medium text-white ' >{loading ? "Loading..": "Sign in"}</button>
                 </div>
             </div>
-            <p className=' ubuntu font-medium text-sm fixed bottom-6 right-6 ' >Designed by Icoweb Agency</p>
+            {/* <p className=' ubuntu font-medium text-sm fixed bottom-6 right-6 ' >Designed by Icoweb Agency</p> */}
         </div>
     )
 } 
