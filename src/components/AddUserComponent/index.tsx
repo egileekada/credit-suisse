@@ -8,12 +8,15 @@ import Close from "../../assets/Close.svg"
 import { usePostCallback } from '../../action/useAction';
 import { useNavigate } from 'react-router-dom';
 import { IUser, UserContext } from '../../context';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/high-res.css'
 
 export default function Index(props: any) {
 
     const [ countryOfOrigin, setCountryOfOrigin ] = React.useState("")
     const [ showPassword, setShowPassword ] = React.useState(false)
     const [ gender, setGender ] = React.useState("")
+    const [ phoneNumber, setPhoneNumber ] = React.useState("")
     const [ maritalStatus, setMaritalStatus ] = React.useState("")
     const [ location, setLocation ] = React.useState("")
     const { handlePost } = usePostCallback();
@@ -76,8 +79,9 @@ export default function Index(props: any) {
         formik.setFieldValue("password_confirmation", formik.values.password)
         formik.setFieldValue("country_of_birth", countryOfOrigin)
         formik.setFieldValue("nationality", location)
-    }, [countryOfOrigin, location, gender, maritalStatus, formik.values.password]) 
-
+        formik.setFieldValue("phone", phoneNumber) 
+    }, [countryOfOrigin, location, gender, maritalStatus, formik.values.password, phoneNumber]) 
+ 
     const submit = async () => {
     
         if (!formik.dirty) { 
@@ -138,6 +142,7 @@ export default function Index(props: any) {
                     <ModalBody  >  
                         <div className=' w-full grid grid-cols-3 gap-6 p-6 text-sm poppins-medium ' >
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >First Name</p>
                                 <Input 
                                     name="first_name"
                                     onChange={formik.handleChange}
@@ -160,6 +165,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Last Name</p>
                                 <Input 
                                     name="last_name"
                                     onChange={formik.handleChange}
@@ -180,6 +186,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Other Name (Optional)</p>
                                 <Input 
                                     name="other_name"
                                     onChange={formik.handleChange}
@@ -200,6 +207,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Email Address</p>
                                 <Input 
                                     name="email"
                                     onChange={formik.handleChange}
@@ -220,13 +228,18 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
-                                <Input 
-                                    name="phone"
-                                    onChange={formik.handleChange}
-                                    onFocus={() =>
-                                        formik.setFieldTouched("phone", true, true)
-                                    } type="tel"
-                                    placeholder='Phone Number' fontSize="14px" height="50px" border="1px solid #E1E2E5" border-radius="5px"  />
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Phone Number</p>
+                                <PhoneInput  
+                                    country='us'  
+                                    onChange={setPhoneNumber}
+                                    inputStyle={{height: '50px', width:'100%'}}
+                                    enableSearch
+                                    inputProps={{
+                                        name: 'phone',
+                                        required: true,
+                                        autoFocus: true,  
+                                    }}
+                                    />  
                                 <div className="w-full h-auto pt-2">
                                     {formik.touched.phone && formik.errors.phone && (
                                         <motion.p
@@ -240,6 +253,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full relative ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Password</p>
                                 <div className=' w-full relative ' >
                                     <Input 
                                         name="password"
@@ -320,9 +334,16 @@ export default function Index(props: any) {
                                     )}
                                 </div> 
                             </div> 
+                            <div> 
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Country of Birth</p>
                             <SelectLocation name='Country of Birth' location={setLocation} birth={setCountryOfOrigin} />
-                            <SelectLocation name='Nationality' location={setLocation} birth={setCountryOfOrigin}  /> 
-                            <div className=' w-full ' >
+                            </div> 
+                            <div> 
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Nationality</p>
+                                <SelectLocation name='Nationality' location={setLocation} birth={setCountryOfOrigin}  />
+                            </div> 
+                            <div className=' w-full ' > 
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Residential Address</p>
                                 <Input 
                                     name="residential_address"
                                     onChange={formik.handleChange}
@@ -342,7 +363,8 @@ export default function Index(props: any) {
                                     )}
                                 </div> 
                             </div>
-                            <div className=' w-full ' >
+                            <div className=' w-full ' > 
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Social Security Number</p>
                                 <Input 
                                     name="ssn"
                                     onChange={formik.handleChange}
@@ -364,6 +386,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Employment Status</p>
                                 <Select 
                                     name="employment_status"
                                     onChange={formik.handleChange}
@@ -372,6 +395,7 @@ export default function Index(props: any) {
                                     } 
                                     placeholder='Employment Status' fontSize="14px" height="50px" border="1px solid #E1E2E5" border-radius="5px" >
                                         <option>Employed</option>
+                                        <option>Self-Employed</option>
                                         <option>Unemployed</option>
                                     </Select>
                                 <div className="w-full h-auto pt-2">
@@ -387,6 +411,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Account Type</p>
                                 <Select 
                                     name="account_type"
                                     onChange={formik.handleChange}
@@ -396,6 +421,10 @@ export default function Index(props: any) {
                                     placeholder='Account Type' fontSize="14px" height="50px" border="1px solid #E1E2E5" border-radius="5px" >
                                     <option>Savings</option>
                                     <option>Current</option>
+                                    <option>Fixed Deposit</option>
+                                    <option>Checking</option>
+                                    <option>Non-resident</option>
+                                    <option>Domiciliary</option>
                                 </Select>
                                 <div className="w-full h-auto pt-2">
                                     {formik.touched.account_type && formik.errors.account_type && (
@@ -410,6 +439,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Next of Kin</p>
                                 <Input 
                                     name="next_of_kin"
                                     onChange={formik.handleChange}
@@ -430,6 +460,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Assign Account Number</p>
                                 <Input 
                                     name="account_number"
                                     onChange={formik.handleChange}
@@ -450,6 +481,7 @@ export default function Index(props: any) {
                                 </div> 
                             </div>
                             <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Account Balance</p>
                                 <Input 
                                     name="balance"
                                     onChange={formik.handleChange}
@@ -471,7 +503,7 @@ export default function Index(props: any) {
                             </div>
                         </div>
                         <div className=' pl-6 poppins-medium pb-8 flex items-center ' >
-                            <p className=' mr-2 ' >Account Balance:</p>
+                            <p className=' mr-2 ' >Account Status:</p>
                             <button className=' h-[40px] text-white w-[130px] text-sm font-bold rounded-full bg-[#7F63F4] mx-3 ' >Declined</button>
                             <button className=' h-[40px] text-white w-[130px] text-sm font-bold rounded-full bg-[#4CAF50] mx-3 ' >Successful</button>
                             <button className=' h-[40px] text-white w-[130px] text-sm font-bold rounded-full bg-[#B72C00] mx-3 ' >Block</button>

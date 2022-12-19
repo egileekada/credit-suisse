@@ -1,7 +1,7 @@
  
-const liveUrl = "http://159.65.63.218"
-const NewUrl = "http://credit-sueisse.com/api"
+const liveUrl = "https://credit-sueisse.com"
+const NewUrl = "http://credit-sueisse.com"
 
 export const BASEURL = {
-    URL: NewUrl, 
+    URL: liveUrl, 
 }
