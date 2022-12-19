@@ -81,7 +81,7 @@ export default function Index() {
     return (
         <div className=' w-full h-screen overflow-hidden flex ' >
             <div className=' w-full ' >
-                <img src={LoginImage} alt="LoginImage" />
+                <img loading='lazy' src={LoginImage} alt="LoginImage" />
             </div>
             <div className=' w-full flex justify-center items-center ' >
                 <div className=' w-[500px] ubuntu flex flex-col  ' >
