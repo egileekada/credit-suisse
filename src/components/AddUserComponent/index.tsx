@@ -19,13 +19,15 @@ export default function AddUserComponent(props: any) {
     const [ gender, setGender ] = React.useState("")
     const [ phoneNumber, setPhoneNumber ] = React.useState("")
     const [ maritalStatus, setMaritalStatus ] = React.useState("")
-    const [ location, setLocation ] = React.useState("")
+    const [ location, setLocation ] = React.useState("")  
+    const [image, setImage] = React.useState('');   
     const { handlePost } = usePostCallback();
     const navigate = useNavigate()
     const toast = useToast()
     const [loading, setLoading] = React.useState(false)
     const userContext: IUser = React.useContext(UserContext); 
     const { handleUpdateUser } = useUpdateUserCallback();
+    const { handleGetData } = useGetDataCallback();
 
     const loginSchema = yup.object({  
         first_name: yup.string().required('Required'),
@@ -47,7 +49,24 @@ export default function AddUserComponent(props: any) {
         account_number: yup.string().required('Required'),
         balance: yup.string().required('Required'),
         password_confirmation: yup.string().required('Required') 
-    }) 
+    })  
+
+    const GetInformation =async()=>{
+        const request = await handleGetData("/admin/users/"+props?.data?.id)  
+        if(request?.data?.message === "Unauthenticated."){
+            navigate("/")
+        } 
+        console.log(request.data.data);
+        // console.log(props.data);
+        
+        
+        // setDataInfo(request.data.data)
+    } 
+    console.log(props?.data);
+
+    React.useEffect(() => { 
+        GetInformation() 
+    }, [userContext.check])  
 
     // formik
     const formik = useFormik({
@@ -82,10 +101,21 @@ export default function AddUserComponent(props: any) {
         formik.setFieldValue("country_of_birth", countryOfOrigin)
         formik.setFieldValue("nationality", location)
         formik.setFieldValue("phone", phoneNumber) 
-    }, [countryOfOrigin, location, gender, maritalStatus, formik.values.password, phoneNumber])   
+    }, [countryOfOrigin, location, gender, maritalStatus, formik.values.password, phoneNumber])    
+
+    const handleImageChange = (e: any ) => {
+
+        const selected = e.target.files[0]; 
+        const TYPES = ["image/png", "image/jpg", "image/jpeg" ];        
+        if (selected && TYPES.includes(selected.type)) {
+            setImage(selected) 
+        } else {
+            console.log('Error')
+        }   
+    }     
 
     React.useEffect(() => { 
-        if(props?.data){
+        if(props?.data?.first_name){
             // GetInformation() 
             formik.setValues({ 
                 first_name: props?.data?.first_name,
@@ -93,7 +123,7 @@ export default function AddUserComponent(props: any) {
                 other_name: props?.data?.other_name,
                 email: props?.data?.email,
                 phone: props?.data?.phone,
-                password: props?.data?.password,
+                password: props?.data?.password_text,
                 marital_status: props?.data?.marital_status,
                 gender: props?.data?.gender,
                 dob: props?.data?.dob,
@@ -106,23 +136,29 @@ export default function AddUserComponent(props: any) {
                 next_of_kin: props?.data?.next_of_kin,
                 account_number: props?.data?.account_number,
                 balance: props?.data?.balance,
-                password_confirmation: props?.data?.marital_status
+                password_confirmation: props?.data?.password_text
             })
             setMaritalStatus(props?.data?.marital_status)
             setGender(props?.data?.gender)
             setPhoneNumber(props?.data?.phone)
+            setCountryOfOrigin(props?.data?.country_of_birth)
+            setLocation(props?.data?.nationality)
         }
     },[props]) 
 
+    console.log(formik.values);
+    
+
     const submit = async () => {
+
         if(props?.data?.first_name){
             update()
         } else {
-            adduser()
+            adduser(image)
         }
     }   
 
-    const adduser = async()=> {
+    const adduser = async(item: any)=> {
         if (!formik.dirty) { 
             toast({
                 title: "You have to fill in th form to continue",
@@ -140,8 +176,9 @@ export default function AddUserComponent(props: any) {
             })
           return;
         }else {
-            setLoading(true);
-            let request = await handlePost(JSON.stringify(formik.values))   
+            setLoading(true); 
+
+            let request = await handlePost(formik.values, image)   
             if (request.status === 200 || request.status === 201) {   
                 toast({
                     title: "User Added Successfully",
@@ -171,27 +208,7 @@ export default function AddUserComponent(props: any) {
 
     const update = async () => { 
         setLoading(true);
-        let request = await handleUpdateUser(JSON.stringify(
-            { 
-                first_name: formik.values.first_name,
-                last_name: formik.values.last_name,
-                other_name: formik.values.other_name,
-                email: formik.values.email,
-                phone: formik.values.phone, 
-                marital_status: formik.values.marital_status,
-                gender: formik.values.gender,
-                dob: formik.values.dob,
-                country_of_birth: formik.values.country_of_birth,
-                nationality: formik.values.nationality,
-                residential_address: formik.values.residential_address,
-                ssn: formik.values.ssn,
-                employment_status: formik.values.employment_status,
-                account_type: formik.values.account_type,
-                next_of_kin: formik.values.next_of_kin,
-                account_number: formik.values.account_number,
-                balance: formik.values.balance, 
-            }
-        ), props?.data?.id) 
+        let request = await handleUpdateUser( formik.values, props?.data?.id, image) 
         if (request.status === 200 || request.status === 201) {   
             toast({
                 title: "User Added Successfully",
@@ -217,6 +234,7 @@ export default function AddUserComponent(props: any) {
             setLoading(false)  
         } 
     }   
+    
 
     return (
         <> 
@@ -295,6 +313,24 @@ export default function AddUserComponent(props: any) {
                                     )}
                                 </div> 
                             </div>
+
+                            {props.data?.photo && (
+                                <div className=' w-full ' >
+                                    <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Image Link</p>  
+                                    <a target="_blank" href={props.data?.photo} className=' border flex items-center pl-4 border-[#E1E2E5] rounded h-[50px] ' >
+                                        Click Here
+                                    </a>
+                                </div> 
+                            )}
+
+                            <div className=' w-full ' >
+                                <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >{props.data?.photo ? "Change Photo": "Photo"}</p>
+                                <div className=' w-full ' >
+                                <Input  accept="image/*" id="input"
+                                    onChange={(e)=> handleImageChange(e)} type="file"
+                                      fontSize="14px" paddingTop="10px" height="50px" border="1px solid #E1E2E5" border-radius="5px"  /> 
+                                </div>
+                            </div>
                             <div className=' w-full ' >
                                 <p className=' text-[#7C7C7C] poppins-medium text-xs mb-2 ' >Email Address</p>
                                 <Input 
@@ -353,8 +389,7 @@ export default function AddUserComponent(props: any) {
                                         onChange={formik.handleChange}
                                         onFocus={() =>
                                             formik.setFieldTouched("password", true, true)
-                                        } type={showPassword ? "text" : "password"}
-                                        disabled={props?.data?.first_name ? true:false}
+                                        } type={showPassword ? "text" : "password"} 
                                         placeholder={'Password'} fontSize="14px" height="50px" border="1px solid #E1E2E5" border-radius="5px"  />
                                     <button onClick={()=> setShowPassword((prev)=> !prev)} className=' absolute top-0 bottom-0 right-0 px-4 flex justify-center items-center ' > 
                                         <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -623,7 +658,8 @@ export default function AddUserComponent(props: any) {
                         <button onClick={submit} className=' bg-[#183964] h-[45px] rounded px-10 text-sm text-white ml-auto font-bold ' >
                             {loading ?
                                 "loading...":
-                                "Submit"    
+                                (props.data?.first_name ? "Update User":
+                                "Submit"    )
                             }
                         </button>
                         </div>
