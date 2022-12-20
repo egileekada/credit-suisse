@@ -1,6 +1,8 @@
 import React from 'react'
 import { useGetDataCallback } from '../../../../action/useAction';
 import Bar from "../../../../assets/Bars.png"
+import Current from "../../../../assets/CurrentBar.png"
+import Savings from "../../../../assets/SavingsBar.png"
 import { IUser, UserContext } from '../../../../context';
 import { cashFormat } from '../../../../utils/cashFormat';
 
@@ -26,23 +28,23 @@ export default function Index() {
                     <p className=' font-bold text-[#656E86] text-[20px] mr-4 ' >{dataInfo?.total_users}</p>
                     <img src={Bar} alt="Bars" className=" ml-auto " />
                 </div>
-                <p className=' font-normal text-[#656E86] text-xs ' >400+ Extra (Last Month)</p>
+                {/* <p className=' font-normal text-[#656E86] text-xs ' >400+ Extra (Last Month)</p> */}
             </div>
             <div className=' w-fit ' >
                 <p className=' font-normal text-[#656E86] text-sm ' >Savings Account</p>
                 <div className=' w-full flex my-1 items-start ' >
                     <p className=' font-bold text-[#656E86] text-[20px] mr-4 ' >${cashFormat(Number(dataInfo?.savings_account_count))}</p>
-                    <img src={Bar} alt="Bars" className=" ml-auto " />
+                    <img src={Savings} alt="Bars" className=" ml-auto " />
                 </div>
-                <p className=' font-normal text-[#656E86] text-xs ' >Prepared to $25.00 (Last Month)</p>
+                {/* <p className=' font-normal text-[#656E86] text-xs ' >Prepared to $25.00 (Last Month)</p> */}
             </div>
             <div className=' w-fit ' >
                 <p className=' font-normal text-[#656E86] text-sm ' >Current Account</p>
                 <div className=' w-full flex my-1 items-start ' >
                     <p className=' font-bold text-[#656E86] text-[20px] mr-4 ' >${cashFormat(Number(dataInfo?.current_account_count))}</p>
-                    <img src={Bar} alt="Bars" className=" ml-auto " />
+                    <img src={Current} alt="Bars" className=" ml-auto " />
                 </div>
-                <p className=' font-normal text-[#656E86] text-xs ' >Prepared to $25.00 (Last Month)</p>
+                {/* <p className=' font-normal text-[#656E86] text-xs ' >Prepared to $25.00 (Last Month)</p> */}
             </div>
         </div>
     )
