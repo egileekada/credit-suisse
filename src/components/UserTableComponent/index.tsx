@@ -3,7 +3,9 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useGetDataCallback, useDeleteCallback, useChangeStatusCallback, useUpdateBalanceCallback } from '../../action/useAction';
 import Trash from "../../assets/trash.svg" 
+import Edit from "../../assets/Edit.svg" 
 import { IUser, UserContext } from '../../context';
+import AddUserComponent from '../AddUserComponent';
 
 export default function Index(props: any) {
  
@@ -14,6 +16,7 @@ export default function Index(props: any) {
     const [ modalType, setModalType ] = React.useState("")
     const [ loading, setLoading ] = React.useState(false)
     const [ dataInfo, setDataInfo ] = React.useState([] as any)
+    const [ singleUser, setSingleUser ] = React.useState({} as any)
     const [ currentData, setCurrentData ] = React.useState({} as any)
     const toast = useToast()
     const navigate = useNavigate()
@@ -23,12 +26,16 @@ export default function Index(props: any) {
     const { handleDelete } = useDeleteCallback();
     const { handleChangeStatus } = useChangeStatusCallback();
     const { handleUpdateBalance } = useUpdateBalanceCallback();
+    const [check, setCheck] = React.useState(false)  
+    const [open, setOpen] = React.useState(false) 
 
     const GetInformation =async()=>{
         const request = await handleGetData("/admin/users")  
         if(request?.data?.message === "Unauthenticated."){
             navigate("/")
         } 
+        console.log(request.data.data);
+        
         setDataInfo(request.data.data)
     } 
 
@@ -113,8 +120,16 @@ export default function Index(props: any) {
         } 
         setLoading(false)
         onClose()
-    }  
+    }   
 
+    const openModal =(item: any)=>{
+        setSingleUser(item)
+        setOpen(true)
+    } 
+ 
+    const handleCheck =()=> {
+        setCheck((prev) => !prev)
+    }
 
     return ( 
         <div className=' w-full px-6 ' >
@@ -141,7 +156,7 @@ export default function Index(props: any) {
                                 REVENUE
                             </Td>
                             <Td>
-                                RATING
+                                Action
                             </Td>
                             <Td>
 
@@ -157,7 +172,12 @@ export default function Index(props: any) {
                                             <Td>
                                                 <Checkbox size="md" />
                                             </Td>
-                                            <Td className=' text-[#1B2126] font-semibold ' >{item.first_name+" "+item.last_name}</Td>
+                                            <Td className=' text-[#1B2126] font-semibold flex items-center ' >
+                                                {item.first_name+" "+item.last_name} 
+                                                <button onClick={()=> openModal(item.id)} className=' border rounded ml-2 ' > 
+                                                    <img alt="Edit" className='w-4 ' src={Edit} />
+                                                </button>
+                                            </Td>
                                             <Td className=' text-[#68727B] ' >{item.email}</Td>
                                             <Td>
                                                 <Select onChange={(e)=> handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" :"#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
@@ -166,10 +186,13 @@ export default function Index(props: any) {
                                                 </Select>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item?.phone}</Td>
-                                            <Td className=' text-[#68727B] ' >
-                                                <button  onClick={()=> deleteHandler(item, "balance")}>${item?.balance}</button>
+                                            <Td className=' text-[#68727B] relative ' >
+                                                <button className=' relative ' onClick={()=> deleteHandler(item, "balance")}>
+                                                    ${item?.balance}
+                                                    <img alt="Edit" className=' absolute -right-3 -top-3 w-3 ' src={Edit} />
+                                                </button> 
                                             </Td>
-                                            <Td>
+                                            {/* <Td>
                                                 {rating === 2 &&
                                                     <div className=' flex flex-col ' >
                                                         <p className=' text-[#1B2126] ' >{rating}</p>
@@ -194,7 +217,7 @@ export default function Index(props: any) {
                                                         <div className=' w-[45px] mt-[1px] h-[4px] bg-[#11706A] rounded-[30px] ' />
                                                     </div>
                                                 }
-                                            </Td>
+                                            </Td> */}
                                             <Td>
                                                 <button onClick={()=> deleteHandler(item, "delete")} >
                                                     <img src={Trash} className=" w-[12px] " alt="trash" />
@@ -208,13 +231,17 @@ export default function Index(props: any) {
                         {!userContext.search && (
                             <> 
                                 {dataInfo.slice(0, dataLength)?.map((item: any, index: any) => {
-                                    return(
-
+                                    return( 
                                         <Tr key={index} className=' text-xs poppins-regular ' >
                                             <Td>
                                                 <Checkbox size="md" />
                                             </Td>
-                                            <Td className=' text-[#1B2126] font-semibold ' >{item.first_name+" "+item.last_name}</Td>
+                                            <Td className=' text-[#1B2126] font-semibold ' >
+                                                {item.first_name+" "+item.last_name} 
+                                                <button onClick={()=> openModal(item)} className=' border rounded ml-2 ' > 
+                                                    <img alt="Edit" className='w-4 ' src={Edit} />
+                                                </button>
+                                            </Td>
                                             <Td className=' text-[#68727B] ' >{item.email}</Td>
                                             <Td>
                                                 <Select onChange={(e)=> handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" :"#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
@@ -223,10 +250,13 @@ export default function Index(props: any) {
                                                 </Select>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item?.phone}</Td>
-                                            <Td className=' text-[#68727B] ' >
-                                                <button  onClick={()=> deleteHandler(item, "balance")}>${item?.balance}</button>
+                                            <Td className=' text-[#68727B] relative ' >
+                                                <button className=' relative ' onClick={()=> deleteHandler(item, "balance")}>
+                                                    ${item?.balance}
+                                                    <img alt="Edit" className=' absolute -right-3 -top-3 w-3 ' src={Edit} />
+                                                </button> 
                                             </Td>
-                                            <Td>
+                                            {/* <Td>
                                                 {rating === 2 &&
                                                     <div className=' flex flex-col ' >
                                                         <p className=' text-[#1B2126] ' >{rating}</p>
@@ -251,7 +281,7 @@ export default function Index(props: any) {
                                                         <div className=' w-[45px] mt-[1px] h-[4px] bg-[#11706A] rounded-[30px] ' />
                                                     </div>
                                                 }
-                                            </Td>
+                                            </Td> */} 
                                             <Td>
                                                 <button onClick={()=> deleteHandler(item, "delete")} >
                                                     <img src={Trash} className=" w-[12px] " alt="trash" />
@@ -267,6 +297,7 @@ export default function Index(props: any) {
             </TableContainer>
              
 
+            <AddUserComponent open={open} close={setOpen} data={singleUser} check={handleCheck} />
             {userContext.search && (
                 <>  
                     {dataInfo.slice(0, dataLength)?.filter((item: any) => (item.first_name).toLowerCase().includes(userContext.search.toLowerCase()) || (item.last_name).toLowerCase().includes(userContext.search.toLowerCase())).length === 0 && (

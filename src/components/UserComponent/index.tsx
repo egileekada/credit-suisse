@@ -19,6 +19,11 @@ export default function Index() {
     const handleCheck =()=> {
         setCheck((prev) => !prev)
     }
+
+    const openModal =()=>{
+        localStorage.setItem("userId", "")
+        setOpen(true)
+    } 
     
     return (
         <div className=' w-full h-full rounded-lg bg-[#FAFAFA]' >
@@ -27,9 +32,9 @@ export default function Index() {
                 <Select fontSize="14px" width="200px" height="45px" >
                     <option>Monthly</option>
                 </Select>
-                <button onClick={()=> setOpen(true)} className=' bg-[#183964] h-[45px] rounded px-6 text-sm text-white ml-4 ' >Add User</button>
+                <button onClick={()=> openModal()} className=' bg-[#183964] h-[45px] rounded px-6 text-sm text-white ml-4 ' >Add User</button>
             </div>
-            <UserTableComponent check={check} />
+            <UserTableComponent check={check} close={setOpen} />
             <AddUserComponent open={open} close={setOpen} check={handleCheck} />
         </div>
     )

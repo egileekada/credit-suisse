@@ -36,6 +36,24 @@ export function usePostCallback() {
   return { handlePost }
 }
 
+export function useUpdateUserCallback() {
+  const handleUpdateUser = async (postData: any, index: any): Promise<any> => {    
+    try{ 
+        const response = await axios.post('/admin/users/'+index, postData,
+        {
+          headers: {
+            'Content-Type':'application/json', 
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+          }, 
+        }); 
+        return response       
+    } catch(err: any) { 
+      return err?.response    
+    }     
+  }
+  return { handleUpdateUser }
+}
+
 export function useChangeStatusCallback() {
   const handleChangeStatus = async (postData: any, index: any): Promise<any> => {    
     try{ 
@@ -89,3 +107,4 @@ export function useDeleteCallback() {
   }
   return { handleDelete }
 }
+
