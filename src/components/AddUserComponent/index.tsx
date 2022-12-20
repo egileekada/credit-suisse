@@ -223,7 +223,7 @@ export default function AddUserComponent(props: any) {
             <Modal scrollBehavior="inside" onClose={props.close} size="full" isOpen={props.open} >
             <ModalOverlay />
                 <ModalContent rounded="none"  > 
-                    <ModalHeader>Create A New Account</ModalHeader>
+                    <ModalHeader>{props.data? "Update User Information": "Create A New Account"}</ModalHeader>
                     <ModalCloseButton /> 
                     <ModalBody  >  
                         <div className=' w-full grid grid-cols-3 gap-6 p-6 text-sm poppins-medium ' >
