@@ -83,9 +83,9 @@ export function useUpdateUserCallback() {
     formData.append("balance",postData.balance)
     formData.append("password",postData.password)
     formData.append("password_confirmation",postData.password_confirmation)
-    {image !== "hello" && ( 
+    if(image){
       formData.append("photo", image)   
-    )}
+    } 
     try{ 
         const response = await axios.post('/admin/users/'+index, formData,
         {

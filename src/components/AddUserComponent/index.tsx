@@ -20,7 +20,7 @@ export default function AddUserComponent(props: any) {
     const [ phoneNumber, setPhoneNumber ] = React.useState("")
     const [ maritalStatus, setMaritalStatus ] = React.useState("")
     const [ location, setLocation ] = React.useState("")  
-    const [image, setImage] = React.useState('hello');   
+    const [image, setImage] = React.useState('');   
     const { handlePost } = usePostCallback();
     const navigate = useNavigate()
     const toast = useToast()
@@ -49,24 +49,7 @@ export default function AddUserComponent(props: any) {
         account_number: yup.string().required('Required'),
         balance: yup.string().required('Required'),
         password_confirmation: yup.string().required('Required') 
-    })  
-
-    const GetInformation =async()=>{
-        const request = await handleGetData("/admin/users/"+props?.data?.id)  
-        if(request?.data?.message === "Unauthenticated."){
-            navigate("/")
-        } 
-        console.log(request.data.data);
-        // console.log(props.data);
-        
-        
-        // setDataInfo(request.data.data)
-    } 
-    console.log(props?.data);
-
-    React.useEffect(() => { 
-        GetInformation() 
-    }, [userContext.check])  
+    })   
 
     // formik
     const formik = useFormik({
@@ -143,14 +126,15 @@ export default function AddUserComponent(props: any) {
             setPhoneNumber(props?.data?.phone)
             setCountryOfOrigin(props?.data?.country_of_birth)
             setLocation(props?.data?.nationality)
+            setImage("")
         }
-    },[props]) 
+    },[props])  
 
-    console.log(formik.values);
-    
+    React.useEffect(()=>{ 
+        setImage("")
+    },[])
 
-    const submit = async () => {
-
+    const submit = async () => { 
         if(props?.data?.first_name){
             update()
         } else {
@@ -219,8 +203,8 @@ export default function AddUserComponent(props: any) {
             userContext.setCheck(userContext.check+"1")
             const t1 = setTimeout(() => {
                 setLoading(false); 
-                props.check()
-                props.close(false)
+                // props.check()
+                // props.close(false)
                 clearTimeout(t1);
             }, 3000);  
         }else { 
