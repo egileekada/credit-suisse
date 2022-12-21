@@ -20,7 +20,7 @@ export default function AddUserComponent(props: any) {
     const [ phoneNumber, setPhoneNumber ] = React.useState("")
     const [ maritalStatus, setMaritalStatus ] = React.useState("")
     const [ location, setLocation ] = React.useState("")  
-    const [image, setImage] = React.useState('');   
+    const [image, setImage] = React.useState('hello');   
     const { handlePost } = usePostCallback();
     const navigate = useNavigate()
     const toast = useToast()

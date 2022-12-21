@@ -83,7 +83,7 @@ export function useUpdateUserCallback() {
     formData.append("balance",postData.balance)
     formData.append("password",postData.password)
     formData.append("password_confirmation",postData.password_confirmation)
-    {image && ( 
+    {image !== "hello" && ( 
       formData.append("photo", image)   
     )}
     try{ 
