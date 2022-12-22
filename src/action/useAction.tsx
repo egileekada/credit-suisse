@@ -138,6 +138,24 @@ export function useUpdateBalanceCallback() {
   return { handleUpdateBalance }
 }
 
+export function useTransactionStatusCallback() {
+  const handleTransactionStatus = async (postData: any, index: any): Promise<any> => {    
+    try{ 
+        const response = await axios.put('/admin/users/change-transfer-status/'+index, postData,
+        {
+          headers: {
+            'Content-Type':'application/json', 
+            Authorization : `Bearer ${localStorage.getItem('token')}`
+          }, 
+        }); 
+        return response       
+    } catch(err: any) { 
+      return err?.response    
+    }     
+  }
+  return { handleTransactionStatus }
+}
+
 export function useDeleteCallback() {
   const handleDelete = async (postData: any): Promise<any> => {    
     try{ 

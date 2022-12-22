@@ -1,7 +1,7 @@
 import { TableContainer, Table, Thead, Tr, Td, Checkbox, Tbody, Select, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast, Input } from '@chakra-ui/react';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useGetDataCallback, useDeleteCallback, useChangeStatusCallback, useUpdateBalanceCallback } from '../../action/useAction';
+import { useGetDataCallback, useDeleteCallback, useChangeStatusCallback, useUpdateBalanceCallback, useTransactionStatusCallback } from '../../action/useAction';
 import Trash from "../../assets/trash.svg" 
 import Edit from "../../assets/Edit.svg" 
 import { IUser, UserContext } from '../../context';
@@ -13,6 +13,7 @@ export default function Index(props: any) {
     const userContext: IUser = React.useContext(UserContext);
     const [ dataLength, setDataLength ] = React.useState(10)
     const [ newAmount, setNewAmount ] = React.useState("")
+    const [ newTransaction, setNewTransaction ] = React.useState("")
     const [ modalType, setModalType ] = React.useState("")
     const [ loading, setLoading ] = React.useState(false)
     const [ dataInfo, setDataInfo ] = React.useState([] as any)
@@ -21,8 +22,9 @@ export default function Index(props: any) {
     const toast = useToast()
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+    
     const { handleGetData } = useGetDataCallback();
+    const { handleTransactionStatus } = useTransactionStatusCallback();
     const { handleDelete } = useDeleteCallback();
     const { handleChangeStatus } = useChangeStatusCallback();
     const { handleUpdateBalance } = useUpdateBalanceCallback();
@@ -122,6 +124,31 @@ export default function Index(props: any) {
         onClose()
     }   
 
+    const handleTransferStatus =async(item: any, index: any)=>{ 
+        setLoading(true)
+        const request: any = await handleTransactionStatus(JSON.stringify({"transfer_status":item}), index)
+        console.log(request);
+        if(request?.status === 200){
+            toast({
+                title: request?.data?.message,
+                position: "bottom",
+                status: "success",
+                isClosable: true,
+            })
+            GetInformation() 
+            userContext.setCheck(userContext.check+"1")
+        } else {
+            toast({
+                title: request?.data?.message,
+                position: "bottom",
+                status: "success",
+                isClosable: true,
+            })
+        } 
+        setLoading(false)
+        onClose()
+    }   
+
     const openModal =(item: any)=>{
         setSingleUser(item)
         setOpen(true)
@@ -148,6 +175,9 @@ export default function Index(props: any) {
                             </Td>
                             <Td>
                                 STATUS
+                            </Td>
+                            <Td>
+                                TRANSACTION STATUS
                             </Td>
                             <Td>
                                 PHONE NUMBER
@@ -247,6 +277,13 @@ export default function Index(props: any) {
                                                 <Select onChange={(e)=> handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" :"#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
                                                     {item.status !== "active" && <option className=' text-[#11706A] ' value="active">Active</option> }
                                                     {item.status !== "inactive" && <option className=' text-[#F74646] ' value="inactive" >InActive</option> }
+                                                </Select>
+                                            </Td>
+                                            <Td>
+                                                <Select onChange={(e)=> handleTransferStatus(e.target.value, item.id)} width='120px' placeholder={item.transfer_status === "success" ? "Successful" : item.transfer_status === "declined" ? "Declined" : "Inactive"} textColor={item.transfer_status === "success" ? "#11706A" :item.transfer_status === "declined" ? "#7f63f4" : "#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
+                                                    {item.transfer_status !== "success" && <option className=' text-[#11706A] ' value="success">Successful</option> }
+                                                    {item.transfer_status !== "inactive" && <option className=' text-[#7f63f4] ' value="declined" >Declined</option> }
+                                                    {item.transfer_status !== "inactive" && <option className=' text-[#F74646] ' value="block" >Block</option> }
                                                 </Select>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item?.phone}</Td>

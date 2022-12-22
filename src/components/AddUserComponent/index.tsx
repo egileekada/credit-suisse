@@ -632,12 +632,12 @@ export default function AddUserComponent(props: any) {
                                 </div> 
                             </div>
                         </div>
-                        <div className=' pl-6 poppins-medium pb-8 flex items-center ' >
+                        {/* <div className=' pl-6 poppins-medium pb-8 flex items-center ' >
                             <p className=' mr-2 ' >Account Status:</p>
                             <button className=' h-[40px] text-white w-[130px] text-sm font-bold rounded-full bg-[#7F63F4] mx-3 ' >Declined</button>
                             <button className=' h-[40px] text-white w-[130px] text-sm font-bold rounded-full bg-[#4CAF50] mx-3 ' >Successful</button>
                             <button className=' h-[40px] text-white w-[130px] text-sm font-bold rounded-full bg-[#B72C00] mx-3 ' >Block</button>
-                        </div>
+                        </div> */}
                         <div className=' w-full flex mt-8 px-6 pb-10 ' >
                         <button onClick={submit} className=' bg-[#183964] h-[45px] rounded px-10 text-sm text-white ml-auto font-bold ' >
                             {loading ?
