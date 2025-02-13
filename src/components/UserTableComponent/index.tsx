@@ -2,68 +2,65 @@ import { TableContainer, Table, Thead, Tr, Td, Checkbox, Tbody, Select, Button, 
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useGetDataCallback, useDeleteCallback, useChangeStatusCallback, useUpdateBalanceCallback, useTransactionStatusCallback } from '../../action/useAction';
-import Trash from "../../assets/trash.svg" 
-import Edit from "../../assets/Edit.svg" 
+import Trash from "../../assets/trash.svg"
+import Edit from "../../assets/Edit.svg"
 import { IUser, UserContext } from '../../context';
 import AddUserComponent from '../AddUserComponent';
 
 export default function Index(props: any) {
- 
-    const [ rating, setRating ] = React.useState(3)
+
+    const [rating, setRating] = React.useState(3)
     const userContext: IUser = React.useContext(UserContext);
-    const [ dataLength, setDataLength ] = React.useState(10)
-    const [ newAmount, setNewAmount ] = React.useState("")
-    const [ newTransaction, setNewTransaction ] = React.useState("")
-    const [ modalType, setModalType ] = React.useState("")
-    const [ loading, setLoading ] = React.useState(false)
-    const [ dataInfo, setDataInfo ] = React.useState([] as any)
-    const [ singleUser, setSingleUser ] = React.useState({} as any)
-    const [ currentData, setCurrentData ] = React.useState({} as any)
+    const [dataLength, setDataLength] = React.useState(10)
+    const [newAmount, setNewAmount] = React.useState("")
+    const [newTransaction, setNewTransaction] = React.useState("")
+    const [modalType, setModalType] = React.useState("")
+    const [loading, setLoading] = React.useState(false) 
+    const [dataInfo, setDataInfo] = React.useState([] as any)
+    const [singleUser, setSingleUser] = React.useState({} as any)
+    const [currentData, setCurrentData] = React.useState({} as any)
     const toast = useToast()
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    
+
     const { handleGetData } = useGetDataCallback();
     const { handleTransactionStatus } = useTransactionStatusCallback();
     const { handleDelete } = useDeleteCallback();
     const { handleChangeStatus } = useChangeStatusCallback();
     const { handleUpdateBalance } = useUpdateBalanceCallback();
-    const [check, setCheck] = React.useState(false)  
-    const [open, setOpen] = React.useState(false) 
+    const [check, setCheck] = React.useState(false)
+    const [open, setOpen] = React.useState(false)
 
-    const GetInformation =async()=>{
-        const request = await handleGetData("/admin/users")  
-        if(request?.data?.message === "Unauthenticated."){
+    const GetInformation = async () => { 
+        const request = await handleGetData("/admin/users")
+        if (request?.data?.message === "Unauthenticated.") {
             navigate("/")
-        } 
-        console.log(request.data.data);
-        
-        setDataInfo(request.data.data)
-    } 
+        }
+        setDataInfo(request.data.data) 
+    }
 
-    React.useEffect(() => { 
-        GetInformation() 
-    }, [userContext.check])  
+    React.useEffect(() => {
+        GetInformation()
+    }, [userContext.check])
 
-    const deleteHandler =(item: any, type: any)=> {
+    const deleteHandler = (item: any, type: any) => {
         setModalType(type)
-        setCurrentData(item)  
+        setCurrentData(item)
         onOpen()
-    } 
+    }
 
-    const onDeleteHandler = async()=> {
+    const onDeleteHandler = async () => {
         setLoading(true)
-        const request = await handleDelete(currentData.id)  
-        console.log(request); 
-        if(request?.status === 200){
+        const request = await handleDelete(currentData.id)
+        if (request?.status === 200) {
             toast({
                 title: request?.data?.message,
                 position: "bottom",
                 status: "success",
                 isClosable: true,
             })
-            GetInformation() 
-            userContext.setCheck(userContext.check+"1")
+            GetInformation()
+            userContext.setCheck(userContext.check + "1")
         } else {
             toast({
                 title: request?.data?.message,
@@ -72,21 +69,21 @@ export default function Index(props: any) {
                 isClosable: true,
             })
         }
-        onClose() 
+        onClose()
         setLoading(false)
     }
 
-    const handleUserStatus =async(item: any, index: any)=>{
-        const request: any = await handleChangeStatus(JSON.stringify({"status":item}), index) 
-        if(request?.status === 200){
+    const handleUserStatus = async (item: any, index: any) => {
+        const request: any = await handleChangeStatus(JSON.stringify({ "status": item }), index)
+        if (request?.status === 200) {
             toast({
                 title: request?.data?.message,
                 position: "bottom",
                 status: "success",
                 isClosable: true,
             })
-            GetInformation() 
-            userContext.setCheck(userContext.check+"1")
+            GetInformation()
+            userContext.setCheck(userContext.check + "1")
         } else {
             toast({
                 title: request?.data?.message,
@@ -95,23 +92,22 @@ export default function Index(props: any) {
                 isClosable: true,
             })
         }
-        GetInformation()  
+        GetInformation()
         onClose()
     }
 
-    const handleUserBalance =async()=>{ 
+    const handleUserBalance = async () => {
         setLoading(true)
-        const request: any = await handleUpdateBalance(JSON.stringify({"balance":newAmount}), currentData.id)
-        console.log(request);
-        if(request?.status === 200){
+        const request: any = await handleUpdateBalance(JSON.stringify({ "balance": newAmount }), currentData.id)
+        if (request?.status === 200) {
             toast({
                 title: request?.data?.message,
                 position: "bottom",
                 status: "success",
                 isClosable: true,
             })
-            GetInformation() 
-            userContext.setCheck(userContext.check+"1")
+            GetInformation()
+            userContext.setCheck(userContext.check + "1")
         } else {
             toast({
                 title: request?.data?.message,
@@ -119,24 +115,23 @@ export default function Index(props: any) {
                 status: "success",
                 isClosable: true,
             })
-        } 
+        }
         setLoading(false)
         onClose()
-    }   
+    }
 
-    const handleTransferStatus =async(item: any, index: any)=>{ 
+    const handleTransferStatus = async (item: any, index: any) => {
         setLoading(true)
-        const request: any = await handleTransactionStatus(JSON.stringify({"transfer_status":item}), index)
-        console.log(request);
-        if(request?.status === 200){
+        const request: any = await handleTransactionStatus(JSON.stringify({ "transfer_status": item }), index)
+        if (request?.status === 200) {
             toast({
                 title: request?.data?.message,
                 position: "bottom",
                 status: "success",
                 isClosable: true,
             })
-            GetInformation() 
-            userContext.setCheck(userContext.check+"1")
+            GetInformation()
+            userContext.setCheck(userContext.check + "1")
         } else {
             toast({
                 title: request?.data?.message,
@@ -144,24 +139,24 @@ export default function Index(props: any) {
                 status: "success",
                 isClosable: true,
             })
-        } 
+        }
         setLoading(false)
         onClose()
-    }   
+    }
 
-    const openModal =(item: any)=>{
+    const openModal = (item: any) => {
         setSingleUser(item)
         setOpen(true)
-    } 
- 
-    const handleCheck =()=> {
+    }
+
+    const handleCheck = () => {
         setCheck((prev) => !prev)
     }
 
-    return ( 
+    return (
         <div className=' w-full px-6 ' >
             <TableContainer>
-                <Table variant='simple'> 
+                <Table variant='simple'>
                     <Thead className=' text-[#B5BFC9] poppins-medium text-xs ' >
                         <Tr>
                             <Td>
@@ -193,34 +188,34 @@ export default function Index(props: any) {
                             </Td>
                         </Tr>
                     </Thead>
-                    <Tbody> 
+                    <Tbody>
                         {userContext.search && (
-                            <> 
+                            <>
                                 {dataInfo.slice(0, dataLength)?.filter((item: any) => (item.first_name).toLowerCase().includes(userContext.search.toLowerCase()) || (item.last_name).toLowerCase().includes(userContext.search.toLowerCase()))?.map((item: any, index: any) => {
-                                    return( 
+                                    return (
                                         <Tr key={index} className=' text-xs poppins-regular ' >
                                             <Td>
                                                 <Checkbox size="md" />
                                             </Td>
                                             <Td className=' text-[#1B2126] font-semibold flex items-center ' >
-                                                {item.first_name+" "+item.last_name} 
-                                                <button onClick={()=> openModal(item.id)} className=' border rounded ml-2 ' > 
+                                                {item.first_name + " " + item.last_name}
+                                                <button onClick={() => openModal(item.id)} className=' border rounded ml-2 ' >
                                                     <img alt="Edit" className='w-4 ' src={Edit} />
                                                 </button>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item.email}</Td>
                                             <Td>
-                                                <Select onChange={(e)=> handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" :"#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
-                                                    {item.status !== "active" && <option className=' text-[#11706A] ' value="active">Active</option> }
-                                                    {item.status !== "inactive" && <option className=' text-[#F74646] ' value="inactive" >InActive</option> }
+                                                <Select onChange={(e) => handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" : "#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
+                                                    {item.status !== "active" && <option className=' text-[#11706A] ' value="active">Active</option>}
+                                                    {item.status !== "inactive" && <option className=' text-[#F74646] ' value="inactive" >InActive</option>}
                                                 </Select>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item?.phone}</Td>
                                             <Td className=' text-[#68727B] relative ' >
-                                                <button className=' relative ' onClick={()=> deleteHandler(item, "balance")}>
+                                                <button className=' relative ' onClick={() => deleteHandler(item, "balance")}>
                                                     ${item?.balance}
                                                     <img alt="Edit" className=' absolute -right-3 -top-3 w-3 ' src={Edit} />
-                                                </button> 
+                                                </button>
                                             </Td>
                                             {/* <Td>
                                                 {rating === 2 &&
@@ -249,49 +244,49 @@ export default function Index(props: any) {
                                                 }
                                             </Td> */}
                                             <Td>
-                                                <button onClick={()=> deleteHandler(item, "delete")} >
+                                                <button onClick={() => deleteHandler(item, "delete")} >
                                                     <img src={Trash} className=" w-[12px] " alt="trash" />
                                                 </button>
                                             </Td>
-                                        </Tr> 
+                                        </Tr>
                                     )
-                                })} 
+                                })}
                             </>
-                        )} 
+                        )}
                         {!userContext.search && (
-                            <> 
+                            <>
                                 {dataInfo.slice(0, dataLength)?.map((item: any, index: any) => {
-                                    return( 
+                                    return (
                                         <Tr key={index} className=' text-xs poppins-regular ' >
                                             <Td>
                                                 <Checkbox size="md" />
                                             </Td>
                                             <Td className=' text-[#1B2126] font-semibold ' >
-                                                {item.first_name+" "+item.last_name} 
-                                                <button onClick={()=> openModal(item)} className=' border rounded ml-2 ' > 
+                                                {item.first_name + " " + item.last_name}
+                                                <button onClick={() => openModal(item)} className=' border rounded ml-2 ' >
                                                     <img alt="Edit" className='w-4 ' src={Edit} />
                                                 </button>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item.email}</Td>
                                             <Td>
-                                                <Select onChange={(e)=> handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" :"#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
-                                                    {item.status !== "active" && <option className=' text-[#11706A] ' value="active">Active</option> }
-                                                    {item.status !== "inactive" && <option className=' text-[#F74646] ' value="inactive" >InActive</option> }
+                                                <Select onChange={(e) => handleUserStatus(e.target.value, item.id)} width='100px' placeholder={item.status === "active" ? "Active" : "Inactive"} textColor={item.status === "active" ? "#11706A" : "#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
+                                                    {item.status !== "active" && <option className=' text-[#11706A] ' value="active">Active</option>}
+                                                    {item.status !== "inactive" && <option className=' text-[#F74646] ' value="inactive" >InActive</option>}
                                                 </Select>
                                             </Td>
                                             <Td>
-                                                <Select onChange={(e)=> handleTransferStatus(e.target.value, item.id)} width='120px' placeholder={item.transfer_status === "success" ? "Successful" : item.transfer_status === "declined" ? "Declined" : "Inactive"} textColor={item.transfer_status === "success" ? "#11706A" :item.transfer_status === "declined" ? "#7f63f4" : "#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
-                                                    {item.transfer_status !== "success" && <option className=' text-[#11706A] ' value="success">Successful</option> }
-                                                    {item.transfer_status !== "inactive" && <option className=' text-[#7f63f4] ' value="declined" >Declined</option> }
-                                                    {item.transfer_status !== "inactive" && <option className=' text-[#F74646] ' value="block" >Block</option> }
+                                                <Select onChange={(e) => handleTransferStatus(e.target.value, item.id)} width='120px' placeholder={item.transfer_status === "success" ? "Successful" : item.transfer_status === "declined" ? "Declined" : "Inactive"} textColor={item.transfer_status === "success" ? "#11706A" : item.transfer_status === "declined" ? "#7f63f4" : "#F74646"} fontSize="12px" fontWeight="600" backgroundColor="rgba(17, 112, 106, 0.1)" >
+                                                    {item.transfer_status !== "success" && <option className=' text-[#11706A] ' value="success">Successful</option>}
+                                                    {item.transfer_status !== "inactive" && <option className=' text-[#7f63f4] ' value="declined" >Declined</option>}
+                                                    {item.transfer_status !== "inactive" && <option className=' text-[#F74646] ' value="block" >Block</option>}
                                                 </Select>
                                             </Td>
                                             <Td className=' text-[#68727B] ' >{item?.phone}</Td>
                                             <Td className=' text-[#68727B] relative ' >
-                                                <button className=' relative ' onClick={()=> deleteHandler(item, "balance")}>
+                                                <button className=' relative ' onClick={() => deleteHandler(item, "balance")}>
                                                     ${item?.balance}
                                                     <img alt="Edit" className=' absolute -right-3 -top-3 w-3 ' src={Edit} />
-                                                </button> 
+                                                </button>
                                             </Td>
                                             {/* <Td>
                                                 {rating === 2 &&
@@ -318,84 +313,84 @@ export default function Index(props: any) {
                                                         <div className=' w-[45px] mt-[1px] h-[4px] bg-[#11706A] rounded-[30px] ' />
                                                     </div>
                                                 }
-                                            </Td> */} 
+                                            </Td> */}
                                             <Td>
-                                                <button onClick={()=> deleteHandler(item, "delete")} >
+                                                <button onClick={() => deleteHandler(item, "delete")} >
                                                     <img src={Trash} className=" w-[12px] " alt="trash" />
                                                 </button>
                                             </Td>
-                                        </Tr> 
+                                        </Tr>
                                     )
                                 })}
                             </>
-                        )} 
-                    </Tbody> 
+                        )}
+                    </Tbody>
                 </Table>
-            </TableContainer>
-             
+            </TableContainer> 
+
 
             <AddUserComponent open={open} close={setOpen} data={singleUser} check={handleCheck} />
             {userContext.search && (
-                <>  
+                <>
                     {dataInfo.slice(0, dataLength)?.filter((item: any) => (item.first_name).toLowerCase().includes(userContext.search.toLowerCase()) || (item.last_name).toLowerCase().includes(userContext.search.toLowerCase())).length === 0 && (
                         <div className=' w-full flex justify-center py-4 ' >
                             <p className=' font-bold text-xl  ' >No Records Found</p>
                         </div>
                     )}
                 </>
-            )} 
+            )}
 
             {userContext.search && (
-                <>  
+                <>
                     {dataInfo.length === 0 && (
                         <div className=' w-full flex justify-center pt-4 ' >
                             <p className=' font-bold text-xl  ' >No Records Found</p>
                         </div>
                     )}
                 </>
-            )} 
-            
+            )}
+
             <Modal closeOnOverlayClick={false} isOpen={isOpen} isCentered onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent>  
-                <ModalCloseButton />
-                <ModalBody pb={6}> 
-                </ModalBody>
-                    {modalType === "delete" && ( 
-                        <div className=' w-full flex flex-col py-6 items-center justify-center ' > 
+                <ModalContent>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                    </ModalBody>
+                    {modalType === "delete" && (
+                        <div className=' w-full flex flex-col py-6 items-center justify-center ' >
                             <img src={Trash} className=" w-[70px] mb-6 " alt="trash" />
-                            <p className=' font-bold ' >Are You Sure You Want Delete <span className=' text-red-600 ' >{currentData.first_name+" "+currentData.last_name}</span> Account?</p>
+                            <p className=' font-bold ' >Are You Sure You Want Delete <span className=' text-red-600 ' >{currentData.first_name + " " + currentData.last_name}</span> Account?</p>
                         </div>
                     )}
-                    {modalType === "balance" && ( 
-                        <div className=' w-full flex flex-col px-8 py-6 items-center justify-center ' > 
+                    {modalType === "balance" && (
+                        <div className=' w-full flex flex-col px-8 py-6 items-center justify-center ' >
                             <p className=' font-bold text-xl mb-8 ' >Update User's Balance</p>
-                            <Input onChange={(e)=> setNewAmount(e.target.value)} height="45px" placeholder={"$"+currentData?.balance} /> 
+                            <Input onChange={(e) => setNewAmount(e.target.value)} height="45px" placeholder={"$" + currentData?.balance} />
                         </div>
                     )}
-                <ModalFooter>
-                    {modalType === "balance" && ( 
-                        <Button onClick={handleUserBalance} colorScheme="green" mr={3}>
-                            {loading ? "Loading..." : "Update Balance"}
-                        </Button>
-                    )}
-                    {modalType === "delete" && ( 
-                        <Button onClick={onDeleteHandler} colorScheme="red" mr={3}> 
-                            {loading ? "Loading..." : "Delete"}
-                        </Button>
-                    )}
-                    <Button onClick={onClose}>Cancel</Button>
-                </ModalFooter>
+                    <ModalFooter>
+                        {modalType === "balance" && (
+                            <Button onClick={handleUserBalance} colorScheme="green" mr={3}>
+                                {loading ? "Loading..." : "Update Balance"}
+                            </Button>
+                        )}
+                        {modalType === "delete" && (
+                            <Button onClick={onDeleteHandler} colorScheme="red" mr={3}>
+                                {loading ? "Loading..." : "Delete"}
+                            </Button>
+                        )}
+                        <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
                 </ModalContent>
-            </Modal> 
+            </Modal>
             <div className={dataInfo.length > dataLength ? ' py-3 w-full flex justify-center items-center ' : ' hidden'} >
-                <button onClick={()=> setDataLength((prev) => prev+10)} className=' flex items-center poppins-medium ' >
+                <button onClick={() => setDataLength((prev) => prev + 10)} className=' flex items-center poppins-medium ' >
                     Load more
                     <svg className=' ml-2 ' width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1.68568 0.310934L5.50492 4.43546L9.32416 0.310934C9.70805 -0.103645 10.3282 -0.103645 10.7121 0.310934C11.096 0.725513 11.096 1.39522 10.7121 1.80979L6.19396 6.68907C5.81007 7.10364 5.18993 7.10364 4.80604 6.68907L0.287919 1.80979C-0.0959731 1.39522 -0.0959731 0.725513 0.287919 0.310934C0.671812 -0.0930142 1.30179 -0.103645 1.68568 0.310934Z" fill="#141926"/>
+                        <path d="M1.68568 0.310934L5.50492 4.43546L9.32416 0.310934C9.70805 -0.103645 10.3282 -0.103645 10.7121 0.310934C11.096 0.725513 11.096 1.39522 10.7121 1.80979L6.19396 6.68907C5.81007 7.10364 5.18993 7.10364 4.80604 6.68907L0.287919 1.80979C-0.0959731 1.39522 -0.0959731 0.725513 0.287919 0.310934C0.671812 -0.0930142 1.30179 -0.103645 1.68568 0.310934Z" fill="#141926" />
                     </svg>
                 </button>
             </div>
         </div>
-        )
+    )
 } 

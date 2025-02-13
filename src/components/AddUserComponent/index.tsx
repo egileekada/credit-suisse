@@ -21,13 +21,11 @@ export default function AddUserComponent(props: any) {
     const [ maritalStatus, setMaritalStatus ] = React.useState("")
     const [ location, setLocation ] = React.useState("")  
     const [image, setImage] = React.useState('');   
-    const { handlePost } = usePostCallback();
-    const navigate = useNavigate()
+    const { handlePost } = usePostCallback(); 
     const toast = useToast()
     const [loading, setLoading] = React.useState(false)
     const userContext: IUser = React.useContext(UserContext); 
-    const { handleUpdateUser } = useUpdateUserCallback();
-    const { handleGetData } = useGetDataCallback();
+    const { handleUpdateUser } = useUpdateUserCallback(); 
 
     const loginSchema = yup.object({  
         first_name: yup.string().required('Required'),

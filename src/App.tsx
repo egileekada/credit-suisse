@@ -1,35 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, } from 'react-router-dom';  
+import { BrowserRouter as Router, Routes, Route, } from 'react-router-dom';
 import './App.css';
 import DashboardScreen from './components/DashboardScreen';
 import UserComponent from './components/UserComponent';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
 
-function App() { 
-  
-    React.useEffect(() => {
-      fetch(`https://www.universal-tutorial.com/api/getaccesstoken`, {
-        method: 'GET', // or 'PUT'
-        headers: {
-            "Accept": "application/json",
-            "api-token": "V1mhwD-iZGLntVICiPhQfxRIhGpJ1xcokq0xZiMbq9YfK2VcXy0EikVGhfxI6RH-RLE",
-            "user-email": "egileoniso.ekada@gmail.com"
-        }
-      })
-      .then(response => response.json())
-      .then(data => {   
-          localStorage.setItem('country-token', data.auth_token) 
-      })
-      .catch((error) => {
-          console.error('Error:', error); 
-      });
-  },[])
+function App() {
 
   return (
-    <Router>  
-      <Routes>     
-        <Route path='/' element={<LoginPage />}/>  
+    <Router>
+      <Routes>
+        <Route path='/' element={<LoginPage />} />
         <Route path='/dashboard' element={<Dashboard />} >
           <Route path='/dashboard' element={<DashboardScreen />} />
           <Route path='/dashboard/users' element={<UserComponent />} />
