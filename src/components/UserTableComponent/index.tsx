@@ -8,12 +8,10 @@ import { IUser, UserContext } from '../../context';
 import AddUserComponent from '../AddUserComponent';
 
 export default function Index(props: any) {
-
-    const [rating, setRating] = React.useState(3)
+ 
     const userContext: IUser = React.useContext(UserContext);
     const [dataLength, setDataLength] = React.useState(10)
-    const [newAmount, setNewAmount] = React.useState("")
-    const [newTransaction, setNewTransaction] = React.useState("")
+    const [newAmount, setNewAmount] = React.useState("") 
     const [modalType, setModalType] = React.useState("")
     const [loading, setLoading] = React.useState(false) 
     const [dataInfo, setDataInfo] = React.useState([] as any)
